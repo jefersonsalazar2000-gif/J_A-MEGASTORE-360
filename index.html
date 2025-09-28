@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEGA STORE 360</title>
+
+    <!-- PWA Manifest and Theme -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#161B22">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0D1117;
+            color: #c9d1d9;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #30CFD0, #c43ad6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card {
+            background-color: #161B22;
+            border: 1px solid #30363d;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+        .btn-amazon {
+            background: linear-gradient(90deg, #30CFD0, #c43ad6);
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .btn-amazon:hover {
+            box-shadow: 0 0 20px rgba(196, 58, 214, 0.5);
+            transform: scale(1.05);
+        }
+        .btn-admin {
+            background-color: #8B5CF6; /* Morado */
+        }
+        .btn-edit {
+            background-color: #3B82F6; /* Azul */
+        }
+        .btn-delete {
+            background-color: #EF4444; /* Rojo */
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #161B22;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #586069;
+        }
+        .modal {
+            background-color: rgba(13, 17, 23, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        /* Custom file input */
+        .file-input-label {
+            background-color: #374151;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .file-input-label:hover {
+            background-color: #4B5563;
+        }
+        .social-icon:hover {
+            transform: scale(1.2);
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-[#161B22]/80 backdrop-blur-lg sticky top-0 z-40 border-b border-[#30363d]">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+                    <!-- SVG Logo -->
+                    <svg class="w-12 h-12" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#30CFD0;" />
+                                <stop offset="100%" style="stop-color:#c43ad6;" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="46" fill="#161B22" stroke="url(#logoGradient)" stroke-width="8"/>
+                        <text x="50" y="55" font-family="Outfit, sans-serif" font-size="40" font-weight="900" fill="url(#logoGradient)" text-anchor="middle" alignment-baseline="middle">J_A</text>
+                    </svg>
+                    <h1 class="text-4xl md:text-5xl font-black gradient-text">MEGA STORE 360</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <p class="hidden sm:block text-gray-400">Tu portal de afiliados</p>
+                    <button id="admin-toggle" title="Modo Administrador" class="text-gray-400 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0 3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- Admin Controls -->
+        <div id="admin-controls" class="hidden mb-8 text-center">
+            <button id="add-product-btn" class="btn-admin text-white font-bold py-2 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all">
+                + Agregar Producto Nuevo
+            </button>
+        </div>
+        
+        <!-- Filters -->
+        <div class="mb-8 p-4 bg-[#161B22] border border-[#30363d] rounded-lg flex flex-col sm:flex-row gap-4 items-center">
+            <input type="search" id="search-input" placeholder="🔍 Buscar productos..." class="w-full sm:w-2/3 bg-[#0D1117] border border-[#30363d] rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#30CFD0]">
+            <select id="category-filter" class="w-full sm:w-1/3 bg-[#0D1117] border border-[#30363d] rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#30CFD0]">
+                <option value="all">Todas las Categorías</option>
+            </select>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+            <!-- Products will be rendered here -->
+        </div>
+    </main>
+    
+    <!-- Product Modal -->
+    <div id="product-modal" class="fixed inset-0 modal z-50 hidden items-center justify-center p-4">
+        <div class="card w-full max-w-2xl max-h-[90vh] flex flex-col rounded-xl overflow-hidden">
+            <div class="flex justify-between items-center p-6 border-b border-[#30363d]">
+                <h2 id="modal-title" class="text-2xl font-bold gradient-text">Agregar Producto</h2>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-grow">
+                <form id="product-form" class="space-y-4">
+                    <input type="hidden" id="product-id">
+                    <div>
+                        <label for="product-name" class="block text-sm font-medium text-gray-400">Nombre del Producto</label>
+                        <input type="text" id="product-name" required class="mt-1 block w-full bg-[#0D1117] border border-[#30363d] rounded-md p-2 text-white">
+                    </div>
+                    <div>
+                        <label for="product-category" class="block text-sm font-medium text-gray-400">Categoría</label>
+                        <input type="text" id="product-category" required class="mt-1 block w-full bg-[#0D1117] border border-[#30363d] rounded-md p-2 text-white">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="product-price" class="block text-sm font-medium text-gray-400">Precio (ej. 49.99)</label>
+                            <input type="number" step="0.01" id="product-price" required class="mt-1 block w-full bg-[#0D1117] border border-[#30363d] rounded-md p-2 text-white">
+                        </div>
+                        <div>
+                            <label for="product-rating" class="block text-sm font-medium text-gray-400">Rating (ej. 4.8)</label>
+                            <input type="number" step="0.1" max="5" min="0" id="product-rating" required class="mt-1 block w-full bg-[#0D1117] border border-[#30363d] rounded-md p-2 text-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="product-imageUrl" class="block text-sm font-medium text-gray-400">URL de la Imagen</label>
+                        <input type="text" id="product-imageUrl" placeholder="Pegue la URL o suba un archivo" required class="mt-1 block w-full bg-[#0D1117] border border-[#30363d] rounded-md p-2 text-white">
+                    </div>
+                    <div>
+                        <label for="product-imageFile" class="block text-sm font-medium text-gray-400">O sube un archivo:</label>
+                        <div class="mt-2 flex items-center gap-4">
+                            <label for="product-imageFile" class="file-input-label">Seleccionar archivo</label>
+                            <input type="file" id="product-imageFile" accept="image/*" class="hidden">
+                            <img id="image-preview" src="" alt="Vista previa" class="h-16 w-16 object-cover rounded-md hidden bg-[#0D1117]">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="product-affiliateUrl" class="block text-sm font-medium text-gray-400">URL de Afiliado de Amazon</label>
+                        <input type="url" id="product-affiliateUrl" required class="mt-1 block w-full bg-[#0D1117] border border-[#30363d] rounded-md p-2 text-white">
+                    </div>
+                </form>
+            </div>
+            <div class="p-6 border-t border-[#30363d] bg-[#0D1117]">
+                 <button id="save-product-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#161B22] border-t border-[#30363d] mt-12">
+        <div class="container mx-auto py-6 px-4 text-center text-gray-500">
+            <p>&copy; <span id="year"></span> MEGA STORE 360. Todos los derechos reservados.</p>
+            <p class="text-xs mt-2">Como Afiliado de Amazon, gano por compras calificadas.</p>
+            <a href="http://www.youtube.com/@SABIDURIAANIMAL86" target="_blank" rel="noopener noreferrer" class="inline-block mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors shadow-lg">
+                Visita nuestro canal de YouTube
+            </a>
+            <!-- Social Media Icons -->
+            <div class="flex justify-center items-center space-x-6 mt-6">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 social-icon transition-all duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 social-icon transition-all duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.343 2.525c.636-.247 1.363-.416 2.427-.465C9.793 2.013 10.147 2 12.315 2zM12 7a5 5 0 100 10 5 5 0 000-10zm0 8a3 3 0 110-6 3 3 0 010 6zm5.25-9.75a1.25 1.25 0 100-2.5 1.25 1.25 0 000 2.5z" clip-rule="evenodd" /></svg>
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 social-icon transition-all duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="text-gray-400 social-icon transition-all duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91.02.08 0 .14.02.2.04.54.08.98.35 1.38.71.4.36.66.82.79 1.38.04.17.04.34.04.52v5.38c-.53-.13-1.07-.26-1.6-.4-.44-.11-.8-.4-1.08-.77a2.03 2.03 0 00-1.28-1.01c-.5-.17-1.02-.27-1.54-.36-.1-.02-.2-.02-.3-.02-.32 0-.63.02-.95.04-.63.04-1.26.15-1.88.35a3.3 3.3 0 00-1.53 1.14c-.39.53-.61 1.15-.69 1.81-.03.25-.05.5-.05.75v1.65c.02.26.04.52.07.78.03.26.09.52.17.77.23.68.64 1.28 1.2 1.74.57.47 1.24.78 1.98.92.62.12 1.25.16 1.88.13.33-.02.66-.05.98-.1.25-.04.5-.1.74-.17.72-.21 1.4-.56 1.95-1.08.48-.45.81-1 .98-1.6s.2-1.21.14-1.83v-3.48c.53.12 1.06.25 1.59.39.44.11.8.4 1.08.77.29.37.5.8.62 1.28.17.65.22 1.32.16 1.98-.09.98-.38 1.91-.84 2.75-.46.84-1.08 1.54-1.83 2.07-1.06.75-2.31 1.2-3.64 1.31-.62.05-1.24.06-1.86.04a7.83 7.83 0 01-4.57-1.11c-1.23-.68-2.22-1.69-2.88-2.95-.39-.75-.63-1.58-.71-2.45-.05-.48-.06-.97-.06-1.46v-2.1c0-.59.02-1.18.06-1.76.08-1.11.41-2.19 1-3.15.6-.96 1.42-1.74 2.4-2.29.98-.55 2.09-.92 3.25-1.08.43-.06.86-.08 1.29-.08.66 0 1.32.02 1.98.06" /></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialProducts = [
+                // Catálogo de productos actualizado...
+                { id: 92, name: "Apple iPhone 15 Pro Max", category: "Tecnología", price: 1199.00, rating: 5.0, imageUrl: "https://images.pexels.com/photos/18463373/pexels-photo-18463373.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=iphone+15+pro+max" },
+                { id: 93, name: "Apple iPhone 15", category: "Tecnología", price: 799.00, rating: 4.9, imageUrl: "https://images.pexels.com/photos/1786433/pexels-photo-1786433.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=iphone+15" },
+                { id: 101, name: "Consola PlayStation 5", category: "Tecnología", price: 499.99, rating: 4.9, imageUrl: "https://images.pexels.com/photos/9378051/pexels-photo-9378051.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=playstation+5" },
+                { id: 102, name: "Nintendo Switch (OLED)", category: "Tecnología", price: 349.99, rating: 4.9, imageUrl: "https://images.pexels.com/photos/7732057/pexels-photo-7732057.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=nintendo+switch+oled" },
+                { id: 110, name: "Drone DJI Mini 4 Pro", category: "Tecnología", price: 759.00, rating: 4.8, imageUrl: "https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=dji+mini+4+pro" },
+                { id: 45, name: "Apple MacBook Air M2", category: "Tecnología", price: 999.00, rating: 4.9, imageUrl: "https://images.pexels.com/photos/1294886/pexels-photo-1294886.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=macbook+air+m2" },
+                { id: 51, name: "Silla Gaming Ergonómica Pro", category: "Tecnología", price: 189.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/459793/pexels-photo-459793.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=ergonomic+gaming+chair" },
+                { id: 103, name: "Amazon Echo Dot (5ª gen)", category: "Hogar y Cocina", price: 49.99, rating: 4.7, imageUrl: "https://images.pexels.com/photos/4243053/pexels-photo-4243053.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=echo+dot+5th+gen" },
+                { id: 104, name: "Philips Hue Smart Lightstrip", category: "Hogar y Cocina", price: 89.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/1342609/pexels-photo-1342609.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=philips+hue+lightstrip" },
+                { id: 11, name: "Freidora de Aire 5.8L", category: "Hogar y Cocina", price: 99.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/6787127/pexels-photo-6787127.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=air+fryer" },
+                { id: 55, name: "Máquina de Espresso Automática", category: "Hogar y Cocina", price: 499.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/324028/pexels-photo-324028.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=espresso+machine" },
+                { id: 108, name: "Vitamix Explorian Blender", category: "Hogar y Cocina", price: 349.95, rating: 4.9, imageUrl: "https://images.pexels.com/photos/1199589/pexels-photo-1199589.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=vitamix+blender" },
+                { id: 109, name: "Instant Pot Duo Plus", category: "Hogar y Cocina", price: 129.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/10170281/pexels-photo-10170281.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=instant+pot" },
+                { id: 21, name: "Cama Ortopédica para Perro", category: "Mascotas", price: 55.99, rating: 4.9, imageUrl: "https://images.pexels.com/photos/7210748/pexels-photo-7210748.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=orthopedic+dog+bed" },
+                { id: 22, name: "Fuente de Agua para Gato", category: "Mascotas", price: 32.50, rating: 4.7, imageUrl: "https://images.pexels.com/photos/12870535/pexels-photo-12870535.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=cat+water+fountain" },
+                { id: 23, name: "Juguete Interactivo para Perro", category: "Mascotas", price: 15.99, rating: 4.6, imageUrl: "https://images.pexels.com/photos/825947/pexels-photo-825947.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=interactive+dog+toy" },
+                { id: 24, name: "Rascador de Cartón para Gato", category: "Mascotas", price: 19.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/10633405/pexels-photo-10633405.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=cat+scratcher" },
+                { id: 58, name: "Cámara de Tablero (Dash Cam) Full HD", category: "Accesorios de Vehículos", price: 89.99, rating: 4.7, imageUrl: "https://images.pexels.com/photos/3766209/pexels-photo-3766209.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=dash+cam" },
+                { id: 59, name: "Aspiradora de Mano para Coche", category: "Accesorios de Vehículos", price: 39.99, rating: 4.6, imageUrl: "https://images.pexels.com/photos/6625128/pexels-photo-6625128.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=car+vacuum" },
+                { id: 60, name: "Organizador de Maletero Plegable", category: "Accesorios de Vehículos", price: 25.50, rating: 4.8, imageUrl: "https://images.pexels.com/photos/9735058/pexels-photo-9735058.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=trunk+organizer" },
+                { id: 77, name: "Funda Protectora Transparente", category: "Accesorios para Celulares", price: 12.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/5083403/pexels-photo-5083403.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=clear+phone+case" },
+                { id: 78, name: "Protector de Pantalla de Vidrio", category: "Accesorios para Celulares", price: 9.99, rating: 4.7, imageUrl: "https://images.pexels.com/photos/2769274/pexels-photo-2769274.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=tempered+glass+screen+protector" },
+                { id: 81, name: "Trípode Flexible para Celular", category: "Accesorios para Celulares", price: 18.99, rating: 4.6, imageUrl: "https://images.pexels.com/photos/3951615/pexels-photo-3951615.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=flexible+phone+tripod" },
+                { id: 47, name: "Gorra de Béisbol Clásica", category: "Moda y Accesorios", price: 25.00, rating: 4.7, imageUrl: "https://images.pexels.com/photos/1124465/pexels-photo-1124465.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=baseball+cap" },
+                { id: 49, name: "Pantalones Yoguer de Felpa", category: "Moda y Accesorios", price: 45.00, rating: 4.8, imageUrl: "https://images.pexels.com/photos/7495914/pexels-photo-7495914.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=fleece+joggers" },
+                { id: 50, name: "Pantalones Yoguer Técnicos", category: "Moda y Accesorios", price: 55.00, rating: 4.7, imageUrl: "https://images.pexels.com/photos/6311687/pexels-photo-6311687.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=tech+joggers" },
+                { id: 96, name: "Proteína Whey Gold Standard", category: "Suplementos de Gym", price: 74.99, rating: 4.9, imageUrl: "https://images.pexels.com/photos/931321/pexels-photo-931321.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=whey+protein" },
+                { id: 97, name: "Creatina Monohidratada Micronizada", category: "Suplementos de Gym", price: 29.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/5325725/pexels-photo-5325725.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=creatine+monohydrate" },
+                { id: 98, name: "Pre-Entreno Energía Explosiva", category: "Suplementos de Gym", price: 39.95, rating: 4.7, imageUrl: "https://images.pexels.com/photos/703012/pexels-photo-703012.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=pre+workout" },
+                { id: 99, name: "BCAAs Recuperación Muscular", category: "Suplementos de Gym", price: 25.50, rating: 4.6, imageUrl: "https://images.pexels.com/photos/1105379/pexels-photo-1105379.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=bcaa+supplement" },
+                { id: 100, name: "Multivitamínico Deportivo Completo", category: "Suplementos de Gym", price: 28.00, rating: 4.8, imageUrl: "https://images.pexels.com/photos/161559/background-bitter-capsule-161559.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=sports+multivitamin" },
+                { id: 68, name: "Masajeador de Percusión Muscular", category: "Salud y Bienestar", price: 89.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/4386442/pexels-photo-4386442.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=massage+gun" },
+                { id: 69, name: "Monitor de Presión Arterial Digital", category: "Salud y Bienestar", price: 39.99, rating: 4.7, imageUrl: "https://images.pexels.com/photos/4226876/pexels-photo-4226876.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=blood+pressure+monitor" },
+                { id: 70, name: "Oxímetro de Pulso de Dedo", category: "Salud y Bienestar", price: 19.99, rating: 4.9, imageUrl: "https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=pulse+oximeter" },
+                { id: 39, name: "Esterilla de Yoga Antideslizante", category: "Deportes y Aire Libre", price: 28.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=yoga+mat" },
+                { id: 40, name: "Bandas de Resistencia (Set de 5)", category: "Deportes y Aire Libre", price: 19.99, rating: 4.7, imageUrl: "https://images.pexels.com/photos/4164044/pexels-photo-4164044.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=resistance+bands" },
+                { id: 43, name: "Zapatos Hoka Clifton 9", category: "Deportes y Aire Libre", price: 145.00, rating: 4.9, imageUrl: "https://images.pexels.com/photos/18034424/pexels-photo-18034424/free-photo-of-a-pair-of-hoka-running-shoes-on-a-rock.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=hoka+clifton+9" },
+                { id: 72, name: "Tienda de Campaña para 4 Personas", category: "Deportes y Aire Libre", price: 129.99, rating: 4.7, imageUrl: "https://images.pexels.com/photos/2422265/pexels-photo-2422265.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=4+person+tent" },
+                { id: 74, name: "Silla de Camping Plegable", category: "Deportes y Aire Libre", price: 35.00, rating: 4.8, imageUrl: "https://images.pexels.com/photos/1647919/pexels-photo-1647919.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=folding+camping+chair" },
+                { id: 82, name: "Maleta de Mano Rígida (Carry-On)", category: "Viajes y Equipaje", price: 89.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/2029731/pexels-photo-2029731.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=carry+on+luggage" },
+                { id: 83, name: "Organizadores de Equipaje", category: "Viajes y Equipaje", price: 22.50, rating: 4.9, imageUrl: "https://images.pexels.com/photos/5705090/pexels-photo-5705090.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=packing+cubes" },
+                { id: 84, name: "Almohada de Viaje Viscoelástica", category: "Viajes y Equipaje", price: 25.00, rating: 4.7, imageUrl: "https://images.pexels.com/photos/4210611/pexels-photo-4210611.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=travel+pillow" },
+                { id: 86, name: "Kit de Herramientas Básico (148 Pzas)", category: "Jardinería y Bricolaje", price: 45.99, rating: 4.7, imageUrl: "https://images.pexels.com/photos/175039/pexels-photo-175039.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=home+tool+kit" },
+                { id: 87, name: "Macetas de Cerámica (Set de 3)", category: "Jardinería y Bricolaje", price: 29.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=ceramic+planters" },
+                { id: 89, name: "Set de Pintura Acrílica (24 colores)", category: "Arte y Manualidades", price: 22.99, rating: 4.8, imageUrl: "https://images.pexels.com/photos/102127/pexels-photo-102127.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=acrylic+paint+set" },
+                { id: 90, name: "Kit para Hacer Velas de Soja", category: "Arte y Manualidades", price: 34.99, rating: 4.7, imageUrl: "https://images.pexels.com/photos/6624171/pexels-photo-6624171.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=candle+making+kit" },
+                { id: 63, name: "Asesoría de Marca Personal", category: "Asesorías y Crecimiento Personal", price: 150.00, rating: 5.0, imageUrl: "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=400", affiliateUrl: "https://www.amazon.com/s?k=personal+branding+course" }
+            ];
+            
+            let products = [];
+            let adminMode = false;
+
+            // DOM Elements
+            const productGrid = document.getElementById('product-grid');
+            const searchInput = document.getElementById('search-input');
+            const categoryFilter = document.getElementById('category-filter');
+            const adminToggle = document.getElementById('admin-toggle');
+            const adminControls = document.getElementById('admin-controls');
+            const addProductBtn = document.getElementById('add-product-btn');
+            const productModal = document.getElementById('product-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const productForm = document.getElementById('product-form');
+            const modalTitle = document.getElementById('modal-title');
+            const saveProductBtn = document.getElementById('save-product-btn');
+            const imageFileInput = document.getElementById('product-imageFile');
+            const imageUrlInput = document.getElementById('product-imageUrl');
+            const imagePreview = document.getElementById('image-preview');
+            
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Functions
+            const saveProductsToLocalStorage = () => {
+                localStorage.setItem('megaStoreProducts', JSON.stringify(products));
+            };
+
+            const loadProductsFromLocalStorage = () => {
+                const storedProducts = localStorage.getItem('megaStoreProducts');
+                if (storedProducts) {
+                    try {
+                        const parsed = JSON.parse(storedProducts);
+                        if (Array.isArray(parsed)) return parsed;
+                    } catch (e) {
+                        console.error("Error parsing products from localStorage", e);
+                        return initialProducts;
+                    }
+                }
+                return initialProducts;
+            };
+            
+            const renderProducts = () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedCategory = categoryFilter.value;
+                
+                const filteredProducts = products.filter(p => 
+                    (p.name.toLowerCase().includes(searchTerm) || p.category.toLowerCase().includes(searchTerm)) &&
+                    (selectedCategory === 'all' || p.category === selectedCategory)
+                );
+
+                productGrid.innerHTML = '';
+                if (filteredProducts.length === 0) {
+                    productGrid.innerHTML = `<p class="col-span-full text-center text-gray-400">No se encontraron productos.</p>`;
+                    return;
+                }
+                
+                filteredProducts.forEach(product => {
+                    const stars = '⭐'.repeat(Math.round(product.rating)) + '✩'.repeat(5 - Math.round(product.rating));
+                    const adminButtons = adminMode ? `
+                        <div class="absolute top-2 right-2 flex gap-2">
+                            <button class="edit-btn btn-edit p-2 rounded-full text-white shadow-lg" data-id="${product.id}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L14.732 3.732z" /></svg>
+                            </button>
+                            <button class="delete-btn btn-delete p-2 rounded-full text-white shadow-lg" data-id="${product.id}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            </button>
+                        </div>
+                    ` : '';
+
+                    const productCard = `
+                        <div class="card rounded-lg overflow-hidden flex flex-col p-4 relative">
+                            ${adminButtons}
+                            <div class="bg-[#0D1117] rounded-md mb-4 aspect-square flex items-center justify-center">
+                                <img src="${product.imageUrl}" alt="${product.name}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x400/161B22/FFFFFF?text=Imagen+no+disponible';">
+                            </div>
+                            <div class="flex flex-col flex-grow">
+                                <span class="text-xs text-gray-500 font-semibold">${product.category.toUpperCase()}</span>
+                                <h3 class="text-lg font-bold text-gray-200 mt-1 flex-grow">${product.name}</h3>
+                                <div class="flex items-center mt-2">
+                                    <span class="text-yellow-400 text-sm">${stars}</span>
+                                    <span class="text-gray-400 text-xs ml-2">(${product.rating})</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-4">
+                                    <span class="text-2xl font-black text-white">$${product.price.toFixed(2)}</span>
+                                    <a href="${product.affiliateUrl}" target="_blank" rel="noopener noreferrer" class="btn-amazon text-sm font-bold py-2 px-3 rounded-md">
+                                        Ver en Amazon
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    productGrid.innerHTML += productCard;
+                });
+            };
+
+            const populateCategories = () => {
+                const categories = [...new Set(products.map(p => p.category))];
+                categoryFilter.innerHTML = '<option value="all">Todas las Categorías</option>'; // Reset
+                categories.sort().forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categoryFilter.appendChild(option);
+                });
+            };
+
+            const openProductModal = (product = null) => {
+                productForm.reset();
+                imagePreview.classList.add('hidden');
+                imagePreview.src = '';
+                document.getElementById('product-affiliateUrl').value = product ? product.affiliateUrl : 'https://www.amazon.com';
+
+
+                if (product) {
+                    modalTitle.textContent = "Editar Producto";
+                    document.getElementById('product-id').value = product.id;
+                    document.getElementById('product-name').value = product.name;
+                    document.getElementById('product-category').value = product.category;
+                    document.getElementById('product-price').value = product.price;
+                    document.getElementById('product-rating').value = product.rating;
+                    imageUrlInput.value = product.imageUrl;
+                    if(product.imageUrl) {
+                        imagePreview.src = product.imageUrl;
+                        imagePreview.classList.remove('hidden');
+                    }
+                } else {
+                    modalTitle.textContent = "Agregar Producto";
+                    document.getElementById('product-id').value = '';
+                }
+                productModal.classList.remove('hidden');
+            };
+
+            const closeProductModal = () => {
+                productModal.classList.add('hidden');
+            };
+
+            const toggleAdminMode = () => {
+                adminMode = !adminMode;
+                adminControls.classList.toggle('hidden');
+                adminToggle.classList.toggle('text-purple-400', adminMode);
+                renderProducts();
+            };
+
+            // Event Listeners
+            searchInput.addEventListener('input', renderProducts);
+            categoryFilter.addEventListener('change', renderProducts);
+            adminToggle.addEventListener('click', toggleAdminMode);
+            addProductBtn.addEventListener('click', () => openProductModal());
+            closeModalBtn.addEventListener('click', closeProductModal);
+            productModal.addEventListener('click', (e) => {
+                if (e.target === productModal) closeProductModal();
+            });
+
+            imageFileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const dataUrl = event.target.result;
+                        imageUrlInput.value = dataUrl;
+                        imagePreview.src = dataUrl;
+                        imagePreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            productForm.addEventListener('submit', (e) => e.preventDefault());
+            saveProductBtn.addEventListener('click', () => {
+                const id = document.getElementById('product-id').value;
+                const newProduct = {
+                    id: id ? parseInt(id) : Date.now(),
+                    name: document.getElementById('product-name').value,
+                    category: document.getElementById('product-category').value,
+                    price: parseFloat(document.getElementById('product-price').value),
+                    rating: parseFloat(document.getElementById('product-rating').value),
+                    imageUrl: document.getElementById('product-imageUrl').value,
+                    affiliateUrl: document.getElementById('product-affiliateUrl').value,
+                };
+
+                if(!newProduct.name || !newProduct.affiliateUrl || !newProduct.imageUrl) {
+                    alert("Por favor, completa el nombre, la URL de afiliado y la imagen.");
+                    return;
+                }
+
+                if (id) {
+                    products = products.map(p => p.id === newProduct.id ? newProduct : p);
+                } else {
+                    products.push(newProduct);
+                }
+                
+                saveProductsToLocalStorage();
+                populateCategories();
+                renderProducts();
+                closeProductModal();
+            });
+
+            productGrid.addEventListener('click', e => {
+                const editBtn = e.target.closest('.edit-btn');
+                const deleteBtn = e.target.closest('.delete-btn');
+
+                if (editBtn) {
+                    const productId = parseInt(editBtn.dataset.id);
+                    const productToEdit = products.find(p => p.id === productId);
+                    if (productToEdit) openProductModal(productToEdit);
+                }
+
+                if (deleteBtn) {
+                    const productId = parseInt(deleteBtn.dataset.id);
+                    if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+                        products = products.filter(p => p.id !== productId);
+                        saveProductsToLocalStorage();
+                        populateCategories();
+                        renderProducts();
+                    }
+                }
+            });
+
+            // Initial Load
+            products = loadProductsFromLocalStorage();
+            populateCategories();
+            renderProducts();
+
+            // PWA Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                .then((reg) => console.log('Service worker registered.', reg))
+                .catch((err) => console.log('Service worker not registered.', err));
+            }
+        });
+    </script>
+
+</body>
+</html>
